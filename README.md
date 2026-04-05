@@ -12,6 +12,8 @@ The system is designed with a strict, closed-loop packet flow to ensure zero DNS
 
 `Client Device` ➔ `[Encrypted Tunnel]` ➔ `WireGuard (AWS EC2)` ➔ `AdGuard Home (Port 53)` ➔ `Unbound (Port 5335)` ➔ `Root Servers`
 
+![System Architecture](architecture_diagram.png)
+
 1. **WireGuard:** Establishes a lightweight, state-of-the-art encrypted VPN tunnel from the client to the AWS cloud.
 2. **AdGuard Home:** Acts as a DNS Sinkhole. It intercepts all DNS queries from the VPN interface (`10.66.66.1`), blocking telemetry, ads, and malicious domains using custom rule lists (e.g., OISD, ABPVN).
 3. **Unbound:** A validating, recursive, and caching DNS resolver. Instead of forwarding clean queries to public DNS providers (like Google or Cloudflare), Unbound queries the ICANN Root Servers directly, ensuring complete privacy.
@@ -50,13 +52,13 @@ The system is designed with a strict, closed-loop packet flow to ensure zero DNS
 
 By issuing two consecutive `dig` requests, we can prove the local recursive resolver is actively caching queries. Latency drops to 0ms.
 
-![Unbound Cache Proof](unbound_cache_proof.png)
+![Unbound Cache Proof](unbound_cache_proof.PNG)
 
 ### Client DNS Configuration
 
 The client must be explicitly configured to use the internal VPN Gateway IP (`10.66.66.1`) as its sole DNS server.
 
-![Client DNS Config](client_dns_config.png)
+![Client DNS Config](client_dns_config.)
 
 ---
 
