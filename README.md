@@ -33,6 +33,7 @@ The system is designed with a strict, closed-loop packet flow to ensure zero DNS
 * **Port Conflict Resolution:** Overcame the default Ubuntu `systemd-resolved` port 53 conflict by safely modifying `resolved.conf.d` and re-linking the `resolv.conf` stub, allowing AdGuard Home to act as the primary local resolver.
 * **Optimized Blocklists:** Configured with ~240,000 rules specifically chosen to balance maximum tracking prevention with the 1GB RAM limitation of the micro-instance to prevent Out-Of-Memory (OOM) crashes.
 * **Enforced Safe Search:** Implemented strict DNS-level parental controls and SafeSearch enforcement for search engines.
+* **Configuration Templates:** Sanitized configuration templates for WireGuard and Unbound are provided in the `/configs` directory for reference.
 
 ---
 
