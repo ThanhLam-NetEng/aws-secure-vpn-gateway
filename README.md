@@ -37,6 +37,13 @@ The system is designed with a strict, closed-loop packet flow to ensure zero DNS
 
 ---
 
+## 💡 Architecture Decisions (The "Why")
+
+* **WireGuard over OpenVPN/IPsec:** Selected for its state-of-the-art cryptography (ChaCha20), stateless design, and significantly lower CPU overhead. This is critical for maintaining high-speed throughput on a resource-constrained `t3.micro` instance (1 vCPU, 1GB RAM) without introducing latency.
+* **Unbound over Public Upstreams (1.1.1.1 or 8.8.8.8):** While AdGuard successfully filters malicious domains, forwarding the remaining "clean" queries to major providers like Cloudflare or Google still exposes browsing habits to third-party profiling. Unbound acts as a local recursive resolver, querying ICANN root servers directly. This guarantees absolute zero-knowledge privacy and cuts off the data-harvesting supply chain.
+
+---
+
 ## 🛠️ Challenges Resolved
 * **Systemd-resolved Conflict:** Ubuntu's default DNS stub listener occupied Port 53, preventing AdGuard from starting. Resolved by creating a custom `resolved.conf.d` override to disable `DNSStubListener` and relinking `/etc/resolv.conf`, ensuring seamless DNS handoff.
 * **Resource Constraints:** To prevent the 1GB RAM EC2 instance from crashing, carefully selected optimized blocklists (OISD Small & ABPVN) instead of massive multi-million rule lists, keeping memory footprint stable under 150MB.
