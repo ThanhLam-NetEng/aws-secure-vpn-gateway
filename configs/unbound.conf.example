@@ -1,0 +1,23 @@
+server:
+    # Port configuration to avoid conflict with AdGuard Home
+    port: 5335
+    
+    # Listen only on localhost (Crucial to prevent Open Resolver vulnerability)
+    interface: 127.0.0.1
+    
+    # Path to ICANN root servers list
+    root-hints: "/var/lib/unbound/root.hints"
+    
+    # Security: DNSSEC Validation
+    harden-dnssec-stripped: yes
+    
+    # Performance Tuning
+    prefetch: yes
+    num-threads: 1
+    
+    # Privacy
+    hide-identity: yes
+    hide-version: yes
+    
+    # Access Control
+    access-control: 127.0.0.0/8 allow
