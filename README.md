@@ -42,6 +42,12 @@ The system is designed with a strict, closed-loop packet flow to ensure zero DNS
 
 ---
 
+## 🛠️ Challenges Resolved
+* **Systemd-resolved Conflict:** Ubuntu's default DNS stub listener occupied Port 53, preventing AdGuard from starting. Resolved by creating a custom `resolved.conf.d` override to disable `DNSStubListener` and relinking `/etc/resolv.conf`, ensuring seamless DNS handoff.
+* **Resource Constraints:** To prevent the 1GB RAM EC2 instance from crashing, carefully selected optimized blocklists (OISD Small & ABPVN) instead of massive multi-million rule lists, keeping memory footprint stable under 150MB.
+
+---
+
 ## 🚀 Deployment Summary
 
 * **OS:** Ubuntu 24.04 LTS (AWS EC2)
