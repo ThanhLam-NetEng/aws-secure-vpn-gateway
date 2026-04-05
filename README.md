@@ -12,7 +12,16 @@ The system is designed with a strict, closed-loop packet flow to ensure zero DNS
 
 `Client Device` ➔ `[Encrypted Tunnel]` ➔ `WireGuard (AWS EC2)` ➔ `AdGuard Home (Port 53)` ➔ `Unbound (Port 5335)` ➔ `Root Servers`
 
-![System Architecture](architecture_diagram.png)
+graph LR
+    Client[📱 Client Device] -->|Encrypted Tunnel| WG[🛡️ WireGuard VPN]
+
+    subgraph AWS EC2 (Ubuntu t3.micro)
+        WG -->|DNS Queries<br/>10.66.66.1:53| AGH[🛑 AdGuard Home<br/>DNS Sinkhole]
+        AGH -.->|Blocked Trackers| Null[❌ 0.0.0.0]
+        AGH -->|Clean Queries<br/>127.0.0.1:5335| UB[🧠 Unbound<br/>Recursive Resolver]
+    end
+
+    UB -->|Direct Query<br/>DNSSEC Validated| Root[🌐 ICANN Root Servers]
 
 1. **WireGuard:** Establishes a lightweight, state-of-the-art encrypted VPN tunnel from the client to the AWS cloud.
 2. **AdGuard Home:** Acts as a DNS Sinkhole. It intercepts all DNS queries from the VPN interface (`10.66.66.1`), blocking telemetry, ads, and malicious domains using custom rule lists (e.g., OISD, ABPVN).
