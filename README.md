@@ -34,17 +34,29 @@ The system is designed with a strict, closed-loop packet flow to ensure zero DNS
 
 ---
 
-## 📊 Dashboard & Performance
+## 🛠️ Challenges Resolved
+* **Systemd-resolved Conflict:** Ubuntu's default DNS stub listener occupied Port 53, preventing AdGuard from starting. Resolved by creating a custom `resolved.conf.d` override to disable `DNSStubListener` and relinking `/etc/resolv.conf`, ensuring seamless DNS handoff.
+* **Resource Constraints:** To prevent the 1GB RAM EC2 instance from crashing, carefully selected optimized blocklists (OISD Small & ABPVN) instead of massive multi-million rule lists, keeping memory footprint stable under 150MB.
+
+---
+
+## 📊 Dashboard & Performance Proof
 
 *AdGuard Home effectively filtering traffic originating from the WireGuard tunnel.*
 
 ![AdGuard Dashboard](dashboard.png)
 
----
+### Unbound Active Cache
 
-## 🛠️ Challenges Resolved
-* **Systemd-resolved Conflict:** Ubuntu's default DNS stub listener occupied Port 53, preventing AdGuard from starting. Resolved by creating a custom `resolved.conf.d` override to disable `DNSStubListener` and relinking `/etc/resolv.conf`, ensuring seamless DNS handoff.
-* **Resource Constraints:** To prevent the 1GB RAM EC2 instance from crashing, carefully selected optimized blocklists (OISD Small & ABPVN) instead of massive multi-million rule lists, keeping memory footprint stable under 150MB.
+By issuing two consecutive `dig` requests, we can prove the local recursive resolver is actively caching queries. Latency drops to 0ms.
+
+![Unbound Cache Proof](unbound_cache_proof.png)
+
+### Client DNS Configuration
+
+The client must be explicitly configured to use the internal VPN Gateway IP (`10.66.66.1`) as its sole DNS server.
+
+![Client DNS Config](client_dns_config.png)
 
 ---
 
