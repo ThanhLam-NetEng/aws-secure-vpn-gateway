@@ -15,7 +15,7 @@ The system is designed with a strict, closed-loop packet flow to ensure zero DNS
 graph LR
     Client[📱 Client Device] -->|Encrypted Tunnel| WG[🛡️ WireGuard VPN]
 
-    subgraph AWS EC2 (Ubuntu t3.micro)
+    subgraph "AWS EC2 (Ubuntu t3.micro)"
         WG -->|DNS Queries<br/>10.66.66.1:53| AGH[🛑 AdGuard Home<br/>DNS Sinkhole]
         AGH -.->|Blocked Trackers| Null[❌ 0.0.0.0]
         AGH -->|Clean Queries<br/>127.0.0.1:5335| UB[🧠 Unbound<br/>Recursive Resolver]
