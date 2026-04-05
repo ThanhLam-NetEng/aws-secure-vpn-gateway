@@ -1,0 +1,18 @@
+[Interface]
+# Server VPN IP Subnet
+Address = 10.66.66.1/24,fd42:42:42::1/64
+ListenPort = 51820
+
+# REPLACE WITH YOUR ACTUAL SERVER PRIVATE KEY
+PrivateKey = <YOUR_SERVER_PRIVATE_KEY_HERE>
+
+# Routing Rules (Update 'ens5' if your AWS network interface name is different)
+PostUp = iptables -I INPUT -p udp --dport 51820 -j ACCEPT; iptables -I FORWARD -i ens5 -o wg0 -j ACCEPT; iptables -I FORWARD -i wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o ens5 -j MASQUERADE
+PostDown = iptables -D INPUT -p udp --dport 51820 -j ACCEPT; iptables -D FORWARD -i ens5 -o wg0 -j ACCEPT; iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o ens5 -j MASQUERADE
+
+### Client 1
+[Peer]
+# REPLACE WITH YOUR CLIENT PUBLIC KEY
+PublicKey = <CLIENT_PUBLIC_KEY_HERE>
+PresharedKey = <OPTIONAL_PRESHARED_KEY_HERE>
+AllowedIPs = 10.66.66.2/32,fd42:42:42::2/128
